@@ -23,6 +23,7 @@ import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.MigrationInfoService;
 import org.flywaydb.core.api.MigrationVersion;
+import org.flywaydb.core.api.configuration.FluentConfiguration;
 import org.flywaydb.core.api.logging.Log;
 import org.flywaydb.core.api.logging.LogCreator;
 import org.flywaydb.core.api.logging.LogFactory;
@@ -119,7 +120,9 @@ public class Main {
                 classLoader = ClassUtils.addJarsOrDirectoriesToClasspath(classLoader, jarFiles);
             }
             filterProperties(config);
-            Flyway flyway = Flyway.configure(classLoader).configuration(config).load();
+            FluentConfiguration fluentConfiguration = Flyway.configure(classLoader);
+            fluentConfiguration = fluentConfiguration.configuration(config);
+            Flyway flyway = fluentConfiguration.load();
 
             for (String operation : commandLineArguments.getOperations()) {
                 executeOperation(flyway, operation, commandLineArguments);

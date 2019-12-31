@@ -42,6 +42,7 @@ public enum DatabaseType {
     MARIADB("MariaDB", Types.VARCHAR, true),
     MYSQL("MySQL", Types.VARCHAR, true),
     ORACLE("Oracle", Types.VARCHAR, true),
+    TIBERO("Tibero", Types.VARCHAR, true),
     POSTGRESQL("PostgreSQL", Types.NULL, true),
     REDSHIFT("Redshift", Types.VARCHAR, true),
     SQLITE("SQLite", Types.VARCHAR, false),
@@ -49,7 +50,7 @@ public enum DatabaseType {
     SYBASEASE_JTDS("Sybase ASE", Types.NULL, true),
     SYBASEASE_JCONNECT("Sybase ASE", Types.VARCHAR, true),
     SAPHANA("SAP HANA", Types.VARCHAR, true),
-    SNOWFLAKE("Snowflake", Types.VARCHAR, false);
+    SNOWFLAKE("Snowflake", Types.VARCHAR, false),;
 
     private final String name;
 
@@ -74,6 +75,7 @@ public enum DatabaseType {
     private static DatabaseType fromDatabaseProductNameAndVersion(String databaseProductName,
                                                                   String databaseProductVersion,
                                                                   Connection connection) {
+
         if (databaseProductName.startsWith("Apache Derby")) {
             return DERBY;
         }
@@ -107,6 +109,11 @@ public enum DatabaseType {
         if (databaseProductName.startsWith("Oracle")) {
             return ORACLE;
         }
+
+        if (databaseProductName.startsWith("Tibero")) {
+            return TIBERO;
+        }
+
         if (databaseProductName.startsWith("PostgreSQL")) {
             String selectVersionQueryOutput = getSelectVersionOutput(connection);
             if (databaseProductName.startsWith("PostgreSQL 8") && selectVersionQueryOutput.contains("Redshift")) {
@@ -118,11 +125,6 @@ public enum DatabaseType {
             return POSTGRESQL;
         }
         if (databaseProductName.startsWith("DB2")) {
-
-
-
-
-
             return DB2;
         }
         if (databaseProductName.startsWith("ASE")) {
@@ -142,6 +144,10 @@ public enum DatabaseType {
         }
         if (databaseProductName.startsWith("Snowflake")) {
             return SNOWFLAKE;
+        }
+
+        if (databaseProductName.startsWith("Tibero")) {
+            return TIBERO;
         }
         throw new FlywayException("Unsupported Database: " + databaseProductName);
     }

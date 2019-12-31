@@ -19,7 +19,6 @@ import org.flywaydb.core.api.FlywayException;
 import org.flywaydb.core.api.configuration.Configuration;
 import org.flywaydb.core.api.logging.Log;
 import org.flywaydb.core.api.logging.LogFactory;
-import org.flywaydb.core.internal.callback.CallbackExecutor;
 import org.flywaydb.core.internal.database.base.Database;
 import org.flywaydb.core.internal.database.cockroachdb.CockroachDBDatabase;
 import org.flywaydb.core.internal.database.cockroachdb.CockroachDBParser;
@@ -55,6 +54,8 @@ import org.flywaydb.core.internal.database.sqlserver.SQLServerDatabase;
 import org.flywaydb.core.internal.database.sqlserver.SQLServerParser;
 import org.flywaydb.core.internal.database.sybasease.SybaseASEDatabase;
 import org.flywaydb.core.internal.database.sybasease.SybaseASEParser;
+import org.flywaydb.core.internal.database.tibero.TiberoDatabase;
+import org.flywaydb.core.internal.database.tibero.TiberoParser;
 import org.flywaydb.core.internal.jdbc.DatabaseType;
 import org.flywaydb.core.internal.jdbc.JdbcConnectionFactory;
 import org.flywaydb.core.internal.jdbc.JdbcTemplate;
@@ -229,6 +230,12 @@ public class DatabaseFactory {
 
 
                 );
+            case TIBERO:
+                return new TiberoDatabase(configuration, jdbcConnectionFactory
+
+
+
+                );
             default:
                 throw new FlywayException("Unsupported Database: " + databaseType.name());
         }
@@ -328,6 +335,8 @@ public class DatabaseFactory {
             case SYBASEASE_JCONNECT:
             case SYBASEASE_JTDS:
                 return new SybaseASEParser(configuration, parsingContext);
+            case TIBERO:
+                return new TiberoParser(configuration, parsingContext);
             default:
                 throw new FlywayException("Unsupported Database: " + databaseType.name());
         }
